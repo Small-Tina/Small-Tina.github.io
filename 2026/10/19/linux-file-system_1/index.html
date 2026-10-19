@@ -19,12 +19,12 @@
   <meta name="author" content="Tina">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux应用开发学习：文件系统 其一文件类型首先，在Linux系统里面，一切皆文件！大部分东西都是由文件组成的！ 1.1 普通文件文本文件和二进制文件都是普通文件，我们可以用stat或ls去查看文件基本信息，例如 1.2 目录文件目录也是一种文件，同样也可以用stat或ls查看信息，也可以用vi去打开这个dir 1.3 字符设备文件和块设备文件没错，这个居然也是文件，包括硬件设备！应用程序会通过">
+    <meta name="description" content="Linux 文件类型、st_mode 权限位与 stat 系列函数的学习笔记。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux应用开发学习：文件系统 其一">
 <meta property="og:url" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/index.html">
 <meta property="og:site_name" content="Tina小屋">
-<meta property="og:description" content="Linux应用开发学习：文件系统 其一文件类型首先，在Linux系统里面，一切皆文件！大部分东西都是由文件组成的！ 1.1 普通文件文本文件和二进制文件都是普通文件，我们可以用stat或ls去查看文件基本信息，例如 1.2 目录文件目录也是一种文件，同样也可以用stat或ls查看信息，也可以用vi去打开这个dir 1.3 字符设备文件和块设备文件没错，这个居然也是文件，包括硬件设备！应用程序会通过">
+<meta property="og:description" content="Linux 文件类型、st_mode 权限位与 stat 系列函数的学习笔记。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/stat_reg.png">
 <meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/stat_dir.png">
@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/mode_macro_2.png">
 <meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/mode_file_type.png">
 <meta property="article:published_time" content="2026-10-19T12:49:00.000Z">
-<meta property="article:modified_time" content="2026-10-19T13:27:05.506Z">
+<meta property="article:modified_time" content="2026-10-19T14:57:57.665Z">
 <meta property="article:author" content="Tina">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="stat">
@@ -110,7 +110,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Tina小屋</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
