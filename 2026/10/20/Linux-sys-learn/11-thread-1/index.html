@@ -19,34 +19,24 @@
   <meta name="author" content="Tina">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux 文件类型、st_mode 权限位与 stat 系列函数的学习笔记。">
+    <meta name="description" content="Linux应用开发学习：线程基本概念1. 什么是线程首先的首先，线程是系统调度的最小单位，没错，并不是进程哟~（调度进程都得进内核态不是累死了啊！）。而且，线程是归属在进程下的！也就是说，线程的创建要由进程来执行。所以，进程这个可以创造出很多很多线程喵。              另外，线程分为用户态线程和内核态线程，本文先讨论用户态线程。             2. 线程是怎么创建的我们操作系">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux应用开发学习：文件系统 其一">
-<meta property="og:url" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/index.html">
+<meta property="og:title" content="Linux应用开发学习：线程 其一">
+<meta property="og:url" content="https://smalltina259.github.io/2026/10/20/Linux-sys-learn/11-thread-1/index.html">
 <meta property="og:site_name" content="Tina小屋">
-<meta property="og:description" content="Linux 文件类型、st_mode 权限位与 stat 系列函数的学习笔记。">
+<meta property="og:description" content="Linux应用开发学习：线程基本概念1. 什么是线程首先的首先，线程是系统调度的最小单位，没错，并不是进程哟~（调度进程都得进内核态不是累死了啊！）。而且，线程是归属在进程下的！也就是说，线程的创建要由进程来执行。所以，进程这个可以创造出很多很多线程喵。              另外，线程分为用户态线程和内核态线程，本文先讨论用户态线程。             2. 线程是怎么创建的我们操作系">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/stat_reg.png">
-<meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/stat_dir.png">
-<meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/stat_dir_vi.png">
-<meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/stat_dev.png">
-<meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/stat_link.png">
-<meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/mode_macro_1.png">
-<meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/mode_macro_2.png">
-<meta property="og:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/mode_file_type.png">
-<meta property="article:published_time" content="2026-10-19T12:49:00.000Z">
-<meta property="article:modified_time" content="2026-10-19T14:57:57.665Z">
+<meta property="og:image" content="https://smalltina259.github.io/2026/10/20/Linux-sys-learn/11-thread-1/thread_conc.png">
+<meta property="og:image" content="https://smalltina259.github.io/2026/10/20/Linux-sys-learn/11-thread-1/thread_para.png">
+<meta property="article:published_time" content="2026-10-20T08:24:27.000Z">
+<meta property="article:modified_time" content="2026-10-22T12:09:13.137Z">
 <meta property="article:author" content="Tina">
-<meta property="article:tag" content="Linux">
-<meta property="article:tag" content="stat">
-<meta property="article:tag" content="文件系统">
-<meta property="article:tag" content="系统编程">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://smalltina259.github.io/2026/10/19/linux-file-system_1/stat_reg.png">
+<meta name="twitter:image" content="https://smalltina259.github.io/2026/10/20/Linux-sys-learn/11-thread-1/thread_conc.png">
   
   
   
-  <title>Linux应用开发学习：文件系统 其一 - Tina小屋</title>
+  <title>Linux应用开发学习：线程 其一 - Tina小屋</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -315,7 +305,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Linux应用开发学习：文件系统 其一"></span>
+            <span id="subtitle" data-typed-text="Linux应用开发学习：线程 其一"></span>
           
         </div>
 
@@ -326,8 +316,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-10-19 20:49" pubdate>
-          2026年10月19日 晚上
+        <time datetime="2026-10-20 16:24" pubdate>
+          2026年10月20日 下午
         </time>
       </span>
     
@@ -388,47 +378,75 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Linux应用开发学习：文件系统 其一</h1>
+            <h1 id="seo-header">Linux应用开发学习：线程 其一</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Linux应用开发学习：文件系统-其一"><a href="#Linux应用开发学习：文件系统-其一" class="headerlink" title="Linux应用开发学习：文件系统 其一"></a>Linux应用开发学习：文件系统 其一</h1><h2 id="文件类型"><a href="#文件类型" class="headerlink" title="文件类型"></a>文件类型</h2><p>首先，在Linux系统里面，一切皆文件！大部分东西都是由文件组成的！</p>
-<h3 id="1-1-普通文件"><a href="#1-1-普通文件" class="headerlink" title="1.1 普通文件"></a>1.1 普通文件</h3><p>文本文件和二进制文件都是普通文件，我们可以用stat或ls去查看文件基本信息，例如<br><img src="/2026/10/19/linux-file-system_1/stat_reg.png" srcset="/img/loading.gif" lazyload alt="普通文件信息"></p>
-<h3 id="1-2-目录文件"><a href="#1-2-目录文件" class="headerlink" title="1.2 目录文件"></a>1.2 目录文件</h3><p>目录也是一种文件，同样也可以用stat或ls查看信息，也可以用vi去打开这个dir<br><img src="/2026/10/19/linux-file-system_1/stat_dir.png" srcset="/img/loading.gif" lazyload alt="目录文件信息"><br><img src="/2026/10/19/linux-file-system_1/stat_dir_vi.png" srcset="/img/loading.gif" lazyload alt="目录文件vi输出"></p>
-<h3 id="1-3-字符设备文件和块设备文件"><a href="#1-3-字符设备文件和块设备文件" class="headerlink" title="1.3 字符设备文件和块设备文件"></a>1.3 字符设备文件和块设备文件</h3><p>没错，这个居然也是文件，包括硬件设备！<br>应用程序会通过这些设备文件去操控，使用硬件设备！</p>
+                <h1 id="Linux应用开发学习：线程"><a href="#Linux应用开发学习：线程" class="headerlink" title="Linux应用开发学习：线程"></a>Linux应用开发学习：线程</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="1-什么是线程"><a href="#1-什么是线程" class="headerlink" title="1. 什么是线程"></a>1. 什么是线程</h3><p>首先的首先，线程是系统调度的最小单位，没错，并不是进程哟~（调度进程都得进内核态不是累死了啊！）。<br>而且，线程是归属在进程下的！也就是说，线程的创建要由进程来执行。所以，进程这个可以创造出很多很多线程喵。</p>
 <div class="note note-info">
-            <p>值得注意的是，设备文件并不对应磁盘上的文件，他是由文件系统虚拟出来的，存放于&#x2F;dev文件夹中，称为虚拟文件系统devtmpfs</p> 
+            <p>另外，线程分为用户态线程和内核态线程，本文先讨论用户态线程。</p> 
           </div>
-<p><img src="/2026/10/19/linux-file-system_1/stat_dev.png" srcset="/img/loading.gif" lazyload alt="字符设备文件和块设备文件信息"></p>
-<h3 id="1-4-符号链接文件"><a href="#1-4-符号链接文件" class="headerlink" title="1.4 符号链接文件"></a>1.4 符号链接文件</h3><p>类似于windows的快捷方式~刚刚我们字符设备文件和块设备文件信息图中有个fd，那个就是符号链接文件</p>
+<h3 id="2-线程是怎么创建的"><a href="#2-线程是怎么创建的" class="headerlink" title="2. 线程是怎么创建的"></a>2. 线程是怎么创建的</h3><p>我们操作系统创建进程的时候，会自动为这个进程创建一个线程喵，这个线程就是Main thread（主线程）,我们的main对应的的函数就是主线程的入口函数。<br>而主线程能干的事情是很重要的！比如！</p>
+<ul>
+<li>主线程根据需要去创建&#x2F;回收&#x2F;停止&#x2F;取消线程</li>
+<li>主线程一般是最后一个退出运行的，除非是detach分离了子线程</li>
+</ul>
+<h3 id="3-线程特点"><a href="#3-线程特点" class="headerlink" title="3. 线程特点"></a>3. 线程特点</h3><p>除了上述描述的线程特点之外，多线程程序还有以下特点</p>
+<ul>
+<li>系统调度的最小单位</li>
+<li>线程不单独存在、而是包含在进程中</li>
+<li>可并发执行，注意区别并行哟~</li>
+<li>共享进程资源：比如，所有线程都共享进程内存空间地址，还可以访问进程所拥有的已打开文件、定时器、信号量。但是进程又都有自己的线程栈，寄存器环境以及本地存储！</li>
+</ul>
 <div class="note note-info">
-            <p>硬链接不是符号链接文件哟</p> 
+            <p>有关于并发和并行，以及串行</p> <ul> <li>并发是不同任务同时在进行，而是多个任务交替进行，虽然是交替执行，但是程序执行效率还是很高的</li> <li>并行则是不同任务一定是同时执行的</li> <li>串行则是一个一个任务轮流做，既不同时进行也不交替运行</li> </ul> 
           </div>
-<p><img src="/2026/10/19/linux-file-system_1/stat_link.png" srcset="/img/loading.gif" lazyload alt="符号链接文件"></p>
-<h3 id="1-5-pipe文件"><a href="#1-5-pipe文件" class="headerlink" title="1.5 pipe文件"></a>1.5 pipe文件</h3><p>用于进程通信，只能单工通信~</p>
-<h3 id="1-6-套接字文件"><a href="#1-6-套接字文件" class="headerlink" title="1.6 套接字文件"></a>1.6 套接字文件</h3><p>也是一种进程间通信的方式，用于本机 Unix domain socket</p>
-<h3 id="1-7-文件类型总结"><a href="#1-7-文件类型总结" class="headerlink" title="1.7 文件类型总结"></a>1.7 文件类型总结</h3><p>没想到啊没想到啊，Linux居然大部分核心和文件挂钩！甚至连字符设备和块设备也是文件！<br>咕咕嘎嘎！一切皆文件！</p>
-<h2 id="Stat函数"><a href="#Stat函数" class="headerlink" title="Stat函数"></a>Stat函数</h2><h3 id="2-1-基本定义"><a href="#2-1-基本定义" class="headerlink" title="2.1 基本定义"></a>2.1 基本定义</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">stat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-keyword">struct</span> stat *buf)</span>;<br></code></pre></td></tr></table></figure>
-<p>pathname: 文件路径； buf：struct stat结构体变量，需要传入一个指针（怎么又是指针！😠）<br>而我们的struct stat结构体，则可以通过man手册去进行查询</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">man 2 stat<br></code></pre></td></tr></table></figure>
-<p>有关的部分演示代码如下图~</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> ret;<br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">stat</span> <span class="hljs-title">file_stat</span>;</span><br><br>ret = stat(<span class="hljs-string">&quot;./test.txt&quot;</span>, &amp;file_stat);<br><br><span class="hljs-keyword">if</span> (ret &lt; <span class="hljs-number">0</span>) &#123;<br>  perror(<span class="hljs-string">&quot;stat error&quot;</span>);<br>  <span class="hljs-built_in">exit</span>(<span class="hljs-number">-1</span>);<br>&#125;<br><br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;file size is:%ld\ninode is:%lu\n&quot;</span>, file_stat.st_size, file_stat.st_ino);<br></code></pre></td></tr></table></figure>
-<div class="note note-danger">
-            <p>注意st_size的类型为off_t, st_ino的类型为ino_t，是8 字节整数喵~，需要转换成long，噢对了st_ino是无符号！</p> 
-          </div>
-<h3 id="2-2-st-mode"><a href="#2-2-st-mode" class="headerlink" title="2.2 st_mode"></a>2.2 st_mode</h3><p>有关st_mode（权限位与文件类型）的东西，我都是直接记0xxx的，有关宏定义的东西不再赘述，看下面的图吧<br><img src="/2026/10/19/linux-file-system_1/mode_macro_1.png" srcset="/img/loading.gif" lazyload alt="权限位宏定义1"><img src="/2026/10/19/linux-file-system_1/mode_macro_2.png" srcset="/img/loading.gif" lazyload alt="权限位宏定义2"><br>其中UGO分别代表这当前的user，当前的用户组group，以及其他用户other，而s系统特殊权限<br>可以看到UGO都有三位，其中第一位代表的是read读权限，第二位是write权限，第三位是exec执行权限，我们的UGO三个用户权限位都是这样的！<br>然后我们三组权限位（UGO 各三位）组成的八进制整数（是八进制，八进制啊喂！），就是该用户对这个用户所有的访问权限！<br>这在我们ls -l也能看得出来，以下权限就是0644，就是-rw-r–r–<br>有关权限位的代码如下~</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%#o\n&quot;</span>, file_stat.st_mode);<br></code></pre></td></tr></table></figure>
-<p>那关于文件类型的话，就看下面的图吧<br><img src="/2026/10/19/linux-file-system_1/mode_file_type.png" srcset="/img/loading.gif" lazyload alt="文件类型"></p>
+<table>
+<thead>
+<tr>
+<th>并发</th>
+<th>并行</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="/2026/10/20/Linux-sys-learn/11-thread-1/thread_conc.png" srcset="/img/loading.gif" lazyload alt="并发"></td>
+<td><img src="/2026/10/20/Linux-sys-learn/11-thread-1/thread_para.png" srcset="/img/loading.gif" lazyload alt="并行"></td>
+</tr>
+</tbody></table>
+<h3 id="4-与进程对比"><a href="#4-与进程对比" class="headerlink" title="4. 与进程对比"></a>4. 与进程对比</h3><p>这里主要从线程的优点来讲吧</p>
+<ul>
+<li>多进程编程的进程切换开销比较大，对于资源紧张的的硬件不友好</li>
+<li>多进程编程还要处理一个非常麻烦的问题：进程间通讯，进程的资源是不共享的。而进程通信十分的麻烦，所以需要线程</li>
+<li>线程创建的速度远大于进程创建，线程创建可以在用户态，也可以在内核态，但是进程创建只能在内核态</li>
+<li>多线程在多核处理器上更有优势<br>综上所述，我认为喵，多线程比多进程用的更多，也更好喵<br>那线程就没有缺点吗，有的</li>
+<li>多线程编程难度高，需要考虑很多问题，比如线程安全问题、信号处理的问题，还有资源共享带来的问题</li>
+<li>多进程编程通常会用在一些大型应用程序项目中，譬如网络服务器应用程序，在中小型应用程序中用的比较少。（这句是直接抄文档的hhh）</li>
+</ul>
+<h2 id="创建-终止-回收"><a href="#创建-终止-回收" class="headerlink" title="创建&#x2F;终止&#x2F;回收"></a>创建&#x2F;终止&#x2F;回收</h2><p>先展示一下相关的函数原型吧</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 用户态多线程头文件</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-comment">// 获取当前线程ID</span><br><span class="hljs-type">pthread_t</span> <span class="hljs-title function_">pthread_self</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-comment">// 线程创建</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_create</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> *thread, <span class="hljs-type">const</span> <span class="hljs-type">pthread_attr_t</span> *attr, <span class="hljs-type">void</span> *(*start_routine) (<span class="hljs-type">void</span> *), <span class="hljs-type">void</span> *arg)</span>;<br><span class="hljs-comment">// 线程退出</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">pthread_exit</span><span class="hljs-params">(<span class="hljs-type">void</span> *retval)</span>;<br><span class="hljs-comment">// 线程回收</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_join</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> thread, <span class="hljs-type">void</span> **retval)</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="1-线程ID-pthread-t"><a href="#1-线程ID-pthread-t" class="headerlink" title="1. 线程ID pthread_t"></a>1. 线程ID pthread_t</h3><p>线程ID号类型为pthread_t，在glibc系统中，为unsigned long，但是在不同的libc（例如musl中）可能不一样，这点需要注意<br>因此，我们要把pthread_t看作一种不透明的数据类型来看待<br>后续有关pthread_t，创建&#x2F;终止&#x2F;回收&#x2F;取消线程等一系列操作，都是围绕我们的线程ID展开的</p>
+<h3 id="2-创建线程-pthread-create"><a href="#2-创建线程-pthread-create" class="headerlink" title="2. 创建线程 pthread_create"></a>2. 创建线程 pthread_create</h3><p>先解释一下参数吧</p>
+<ul>
+<li>pthread_t *thread: 创建线程后，线程ID存放的地方（关于为什么不直接返回函数值，在前面有讲）</li>
+<li>const pthread_attr_t *attr: 线程的相关参数</li>
+<li>void *(*start_routine) (void *): 一个函数指针，指向子线程需要执行的函数，注意到我们的返回值是(void *)，这里不是返回空，而是返回一个不确定的返回值指针，而传入的参数也是一个不确定的指针</li>
+<li>void *arg: 给这个线程执行函数的参数，如果不传参，就设定为NULL</li>
+<li>返回值: 成功返回 0；失败时将返回一个错误号。注意，这里不会设置全局错误码errno，而是直接返回。</li>
+</ul>
 <div class="note note-info">
-            <p>另外我们还可以把S_IFXXX改成S_ISXXX,直接对文件类型进行判断</p> 
+            <p>有关于并发和并行，以及串行<br>进程创建后，新进程就会进入系统调度队列中，获取到CPU就立即执行。<br>但是在多核CPU的机器上，由于我们不知道系统会先调度谁，这时候就需要一定的同步机制了<br>这个在前面的多进程也有这个问题</p> 
           </div>
-<h3 id="2-3-struct-timespec-结构体"><a href="#2-3-struct-timespec-结构体" class="headerlink" title="2.3 struct timespec 结构体"></a>2.3 struct timespec 结构体</h3><p>值得注意的是，我们里面居然还包含了一个timespec的结构体，甚至还有三个！分别是st_atim, st_mtim, st_ctim。至于为什么要在这里重点提及，是因为我们后面仍然需要探讨这三个变量<br>那我们结构体的是这样的</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">timespec</span></span><br><span class="hljs-class">&#123;</span><br> <span class="hljs-type">time_t</span> tv_sec; <span class="hljs-comment">/* 秒 */</span><br> <span class="hljs-type">syscall_slong_t</span> tv_nsec; <span class="hljs-comment">/* 纳秒 */</span><br>&#125;;<br></code></pre></td></tr></table></figure>
-<p>关于系统时间的东西，可以在正点原子Linux教学文档的7.2去查看，后续的blogs也有可能提及</p>
-<h3 id="2-4-fstat-和-lstat-函数"><a href="#2-4-fstat-和-lstat-函数" class="headerlink" title="2.4 fstat 和 lstat 函数"></a>2.4 fstat 和 lstat 函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">fstat</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-keyword">struct</span> stat *buf)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">lstat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-keyword">struct</span> stat *buf)</span>;<br></code></pre></td></tr></table></figure>
-<p>啊~好，看到我们的fd就知道我们的fstat要传入什么东西了，是文件描述符！关于文件描述符，这里不再多赘述。<br>而lstat，在这里说明一下，我们的stat和fstat在查询链接文件（后续称为link文件）的时候，都是查询我们实际指向文件的信息；而lstat就是只查我们链接文件本身的信息。</p>
-
+<h3 id="3-终止线程-pthread-exit"><a href="#3-终止线程-pthread-exit" class="headerlink" title="3. 终止线程 pthread_exit"></a>3. 终止线程 pthread_exit</h3><p>依旧解释一下参数</p>
+<ul>
+<li>void *retval: 要返回回去的不确定结构体，或者退出码<br>而我们终止线程不仅仅有pthread_exit，算上他，一共有三种方式</li>
+<li>return函数返回值</li>
+<li>pthread_exit带返回值</li>
+<li>pthread_cancel强制终止，返回值为-1</li>
+</ul>
+<h3 id="4-回收线程-pthread-join"><a href="#4-回收线程-pthread-join" class="headerlink" title="4. 回收线程 pthread_join"></a>4. 回收线程 pthread_join</h3><div class="note note-info">
+            <p>还没写完…</p> 
+          </div>
                 
               </div>
             
@@ -436,47 +454,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/" class="category-chain-item">嵌入式Linux</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/Linux%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/" class="category-chain-item">Linux应用开发</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
-      
-        <a href="/tags/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="print-no-link">#文件系统</a>
-      
-        <a href="/tags/stat/" class="print-no-link">#stat</a>
-      
-        <a href="/tags/%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/" class="print-no-link">#系统编程</a>
-      
-    </div>
   
 </div>
 
@@ -486,8 +463,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Linux应用开发学习：文件系统 其一</div>
-      <div>https://smalltina259.github.io/2026/10/19/linux-file-system_1/</div>
+      <div>Linux应用开发学习：线程 其一</div>
+      <div>https://smalltina259.github.io/2026/10/20/Linux-sys-learn/11-thread-1/</div>
     </div>
     <div class="license-meta">
       
@@ -499,7 +476,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2026年10月19日</div>
+          <div>2026年10月20日</div>
         </div>
       
       
@@ -531,9 +508,21 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2026/10/22/Linux-sys-learn/11-thread-2/" title="Linux应用开发学习：线程 其二">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux应用开发学习：线程 其二</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2026/10/19/Linux-sys-learn/05-file-1/" title="Linux应用开发学习：文件系统 其一">
+                        <span class="hidden-mobile">Linux应用开发学习：文件系统 其一</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
